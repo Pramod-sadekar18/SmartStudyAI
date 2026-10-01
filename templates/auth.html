@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if mode == "signup" %}Create account{% else %}Sign in{% endif %} | SmartStudyAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { color-scheme: dark; font-family: "DM Sans", "Segoe UI", sans-serif; background: #000; color: #ededed; }
+        * { box-sizing: border-box; }
+        body { display: grid; min-height: 100vh; margin: 0; place-items: center; padding: 24px; }
+        .auth-panel { width: min(100%, 400px); }
+        .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 34px; color: #fff; text-decoration: none; font-size: 18px; font-weight: 700; }
+        .brand-mark { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 10px; background: #242424; font-size: 17px; }
+        h1 { margin: 0; color: #f5f5f5; font-size: 25px; font-weight: 600; text-align: center; }
+        .subtitle { margin: 8px 0 28px; color: #a0a0a0; font-size: 14px; text-align: center; }
+        form { display: grid; gap: 17px; }
+        .field { display: grid; gap: 7px; }
+        label { color: #e6e6e6; font-size: 13px; font-weight: 600; }
+        input { width: 100%; min-height: 46px; border: 1px solid #4a4a4a; border-radius: 10px; padding: 10px 13px; outline: none; background: #171717; color: #f5f5f5; font: inherit; }
+        input:focus { border-color: #999; box-shadow: 0 0 0 2px rgba(255,255,255,.08); }
+        .help-text { color: #929292; font-size: 11px; line-height: 1.5; }
+        .help-text ul { margin: 5px 0 0; padding-left: 18px; }
+        .errors, .errorlist { margin: 0; padding-left: 18px; color: #ff9b91; font-size: 12px; }
+        .submit-button { min-height: 46px; margin-top: 4px; border: 0; border-radius: 10px; background: #f2f2f2; color: #121212; font: inherit; font-weight: 700; cursor: pointer; }
+        .submit-button:hover { background: #dcdcdc; }
+        .auth-switch { margin: 22px 0 0; color: #a0a0a0; font-size: 13px; text-align: center; }
+        .auth-switch a { color: #f5f5f5; font-weight: 600; text-underline-offset: 3px; }
+        .security-note { margin: 30px 0 0; color: #777; font-size: 11px; text-align: center; }
+    </style>
+</head>
+<body>
+    <main class="auth-panel">
+        <a class="brand" href="{% url 'home' %}">
+            <span class="brand-mark" aria-hidden="true">S</span>
+            <span>SmartStudyAI</span>
+        </a>
+        {% if mode == "signup" %}
+        <h1>Create your account</h1>
+        <p class="subtitle">Keep your documents and study chats in one place.</p>
+        {% else %}
+        <h1>Welcome back</h1>
+        <p class="subtitle">Sign in to continue to your documents.</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            {% if form.non_field_errors %}<div class="errors">{{ form.non_field_errors }}</div>{% endif %}
+            {% for field in form %}
+            <div class="field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<div class="help-text">{{ field.help_text|safe }}</div>{% endif %}
+                {% if field.errors %}<div class="errors">{{ field.errors }}</div>{% endif %}
+            </div>
+            {% endfor %}
+            <button class="submit-button" type="submit">{% if mode == "signup" %}Create account{% else %}Sign in{% endif %}</button>
+        </form>
+
+        {% if mode == "signup" %}
+        <p class="auth-switch">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+        {% else %}
+        <p class="auth-switch">New to SmartStudyAI? <a href="{% url 'signup' %}">Create an account</a></p>
+        {% endif %}
+        <p class="security-note">Your study documents are private to your account.</p>
+    </main>
+</body>
+</html>

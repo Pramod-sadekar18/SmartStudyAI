@@ -1,0 +1,6 @@
+django
+pypdf
+chromadb
+sentence-transformers
+google-genai
+openai

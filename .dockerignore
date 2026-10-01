@@ -1,0 +1,16 @@
+.git
+.venv
+venv
+__pycache__
+**/__pycache__
+*.py[cod]
+.env
+.env.*
+**/.env
+**/.env.*
+db.sqlite3
+*.sqlite3-journal
+chroma_db
+media
+staticfiles
+.DS_Store
